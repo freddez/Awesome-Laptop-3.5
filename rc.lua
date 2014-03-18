@@ -141,7 +141,7 @@ vicious.register(batt, vicious.widgets.bat, "Batt: $2% Rem: $3", 61, "BAT1")
 loadwidget = wibox.widget.textbox()
 vicious.register(loadwidget, vicious.widgets.uptime,
                  function (widget, args)
-                    return string.format("Load: %2d", args[4])
+                    return string.format("Load: %.1f", args[4])
                  end, 61)
 
 
@@ -269,7 +269,6 @@ for s = 1, screen.count() do
     right_layout:add(batpct)
     right_layout:add(spacer)
     right_layout:add(loadwidget)
-    -- right_layout:add(pacwidget)
     right_layout:add(spacer)
     right_layout:add(volicon)
     right_layout:add(volpct)
