@@ -2,7 +2,7 @@
 home_path  = os.getenv('HOME') .. '/'
 
 -- Standard awesome library
-local gears = require("gears")
+--local gears = require("gears")
 local awful = require("awful")
 awful.rules = require("awful.rules")
 require("awful.autofocus")
@@ -19,7 +19,7 @@ local menubar = require("menubar")
 require('freedesktop.utils')
 require('freedesktop.menu')
 freedesktop.utils.icon_theme = 'gnome'
---Vicious + Widgets 
+--Vicious + Widgets
 vicious = require("vicious")
 local wi = require("wi")
 
@@ -49,7 +49,7 @@ end
 -- }}}
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvt -fg green -bg black"
+terminal = "gnome-terminal"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -96,27 +96,27 @@ naughty.config.defaults.hover_timeout = nil
 -- -- }}}
 
 -- {{{ Wallpaper
-if beautiful.wallpaper then
-    for s = 1, screen.count() do
-        gears.wallpaper.maximized(beautiful.wallpaper, s, true)
-    end
-end
+--if beautiful.wallpaper then
+--    for s = 1, screen.count() do
+--        gears.wallpaper.maximized(beautiful.wallpaper, s, true)
+--    end
+-- end
 -- }}}
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {
- names  = { 
-         '☭:IRC',
-         '⚡:Luakit', 
-         '♨:Chrome', 
-         '☠:Vim',  
-         '☃:Vbox', 
-         '⌥:Multimedia', 
+ names  = {
+         '♨:Web',
+         '☠:Emacs',
+         '☭:Term',
+         '⚡:Luakit',
+         '☃:Vbox',
+         '⌥:Multimedia',
          '⌘:Conky',
          '✇:IDE',
          '✣:Facepalm',
-           },
+ },
  layout = {
       layouts[5],   -- 1:irc
       layouts[10],  -- 2:luakit
@@ -135,7 +135,7 @@ tags = {
  end
 -- }}}
 
--- Wallpaper Changer Based On 
+-- Wallpaper Changer Based On
 -- menu icon menu pdq 07-02-2012
  local wallmenu = {}
  local function wall_load(wall)
@@ -152,18 +152,26 @@ local item = { l, function () wall_load(l) end }
  end
  wall_menu()
 
--- Widgets 
+-- Widgets
 
 spacer       = wibox.widget.textbox()
 spacer:set_text(' | ')
 
---Weather Widget
-weather = wibox.widget.textbox()
-vicious.register(weather, vicious.widgets.weather, "Weather: ${city}. Sky: ${sky}. Temp: ${tempc}c Humid: ${humid}%. Wind: ${windkmh} KM/h", 1200, "YMML")
 
 --Battery Widget
 batt = wibox.widget.textbox()
 vicious.register(batt, vicious.widgets.bat, "Batt: $2% Rem: $3", 61, "BAT1")
+
+
+
+-- cpuwidget = awful.widget.graph()
+-- --cpuwidget.set_width(50)
+-- --cpuwidget.set_background_color("#494B4F")
+-- --cpuwidget.set_color({ type = "linear", from = { 0, 0 }, to = { 50, 0 },
+-- --                      stops = { { 0, "#FF5656" }, { 0.5, "#88A175" }, { 1, "#AECF96" }})
+-- vicious.cache(vicious.widgets.cpu)
+-- vicious.register(cpuwidget, vicious.widgets.cpu, "$1", 3)
+
 
 
 -- {{{ Menu
@@ -178,9 +186,9 @@ myawesomemenu = {
        }
 
         table.insert(menu_items, { "Awesome", myawesomemenu, beautiful.awesome_icon })
-        table.insert(menu_items, { "Wallpaper", wallmenu, freedesktop.utils.lookup_icon({ icon = 'gnome-settings-background' })}) 
+        table.insert(menu_items, { "Wallpaper", wallmenu, freedesktop.utils.lookup_icon({ icon = 'gnome-settings-background' })})
 
-        mymainmenu = awful.menu({ items = menu_items, width = 150 })
+        mymainmenu = awful.menu({ items = menu_items, width = 300 })
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
@@ -272,14 +280,14 @@ for s = 1, screen.count() do
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(spacer)
-    right_layout:add(mailicon)
-    right_layout:add(mailwidget)
-    right_layout:add(spacer)
+    --right_layout:add(mailicon)
+    --right_layout:add(mailwidget)
+    --right_layout:add(spacer)
     right_layout:add(baticon)
     right_layout:add(batpct)
-    right_layout:add(spacer)
-    right_layout:add(pacicon)
-    right_layout:add(pacwidget)
+    -- right_layout:add(spacer)
+    -- right_layout:add(pacicon)
+    -- right_layout:add(pacwidget)
     right_layout:add(spacer)
     right_layout:add(volicon)
     right_layout:add(volpct)
@@ -295,28 +303,24 @@ for s = 1, screen.count() do
     layout:set_right(right_layout)
 
    mywibox[s]:set_widget(layout)
-   
+
    -- Create the bottom wibox
-     myinfowibox[s] = awful.wibox({ position = "bottom", screen = s })
+     -- myinfowibox[s] = awful.wibox({ position = "bottom", screen = s })
    -- Widgets that are aligned to the bottom
-    local bottom_layout = wibox.layout.fixed.horizontal()
-    bottom_layout:add(cpuicon)
-    bottom_layout:add(cpu)
-    bottom_layout:add(spacer)
-    bottom_layout:add(memicon)
-    bottom_layout:add(mem)
-    bottom_layout:add(spacer)
-    bottom_layout:add(wifiicon)
-    bottom_layout:add(wifi)
-    bottom_layout:add(spacer)
-    bottom_layout:add(weather)
-    bottom_layout:add(spacer)
+    -- local bottom_layout = wibox.layout.fixed.horizontal()
+    -- bottom_layout:add(cpuicon)
+    -- bottom_layout:add(cpuwidget)
+    -- bottom_layout:add(spacer)
+    -- --bottom_layout:add(memicon)
+    -- --bottom_layout:add(mem)
+    -- bottom_layout:add(spacer)
+    -- bottom_layout:add(wifiicon)
+    -- bottom_layout:add(wifi)
+    -- bottom_layout:add(spacer)
+    -- bottom_layout:add(spacer)
 
- -- Now bring it all together 
-    --local layout = wibox.layout.align.horizontal()
-    --layout:set_bottom(bottom_layout)
 
-    myinfowibox[s]:set_widget(bottom_layout)
+    --myinfowibox[s]:set_widget(bottom_layout)
 
 end
 -- }}}
@@ -487,9 +491,11 @@ awful.rules.rules = {
       properties = { tag = tags[1][9] } },
     { rule = { class = "luakit" },
       properties = { tag = tags[1][2] } },
-    -- Set Firefox to always map on tags number 2 of screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { tag = tags[1][2] } },
+    -- Set Firefox to always map on tags number 1 of screen 1.
+    { rule = { class = "Firefox" },
+      properties = { tag = tags[1][1] } },
+    { rule = { class = "Emacs" },
+      properties = { tag = tags[2][1] } },
 }
 -- }}}
 
