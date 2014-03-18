@@ -61,8 +61,7 @@ editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
-local layouts =
-{
+local layouts = {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.tile.left,
@@ -95,13 +94,6 @@ naughty.config.defaults.border_width = 2
 naughty.config.defaults.hover_timeout = nil
 -- -- }}}
 
--- {{{ Wallpaper
---if beautiful.wallpaper then
---    for s = 1, screen.count() do
---        gears.wallpaper.maximized(beautiful.wallpaper, s, true)
---    end
--- end
--- }}}
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
@@ -127,30 +119,14 @@ tags = {
       layouts[10],  -- 7:conky
       layouts[2],   -- 8:ide
       layouts[10],  -- 9:facepalm
-          }
-       }
-  for s = 1, screen.count() do
- -- Each screen has its own tag table.
- tags[s] = awful.tag(tags.names, s, tags.layout)
- end
+ }
+}
+for s = 1, screen.count() do
+   -- Each screen has its own tag table.
+   tags[s] = awful.tag(tags.names, s, tags.layout)
+end
 -- }}}
 
--- Wallpaper Changer Based On
--- menu icon menu pdq 07-02-2012
- local wallmenu = {}
- local function wall_load(wall)
- local f = io.popen('ln -sfn ' .. home_path .. '.config/awesome/wallpaper/' .. wall .. ' ' .. home_path .. '.config/awesome/themes/default/bg.png')
- awesome.restart()
- end
- local function wall_menu()
- local f = io.popen('ls -1 ' .. home_path .. '.config/awesome/wallpaper/')
- for l in f:lines() do
-local item = { l, function () wall_load(l) end }
- table.insert(wallmenu, item)
- end
- f:close()
- end
- wall_menu()
 
 -- Widgets
 
@@ -161,6 +137,12 @@ spacer:set_text(' | ')
 --Battery Widget
 batt = wibox.widget.textbox()
 vicious.register(batt, vicious.widgets.bat, "Batt: $2% Rem: $3", 61, "BAT1")
+
+loadwidget = wibox.widget.textbox()
+vicious.register(loadwidget, vicious.widgets.uptime,
+                 function (widget, args)
+                    return string.format("Load: %2d", args[4])
+                 end, 61)
 
 
 
@@ -285,8 +267,8 @@ for s = 1, screen.count() do
     --right_layout:add(spacer)
     right_layout:add(baticon)
     right_layout:add(batpct)
-    -- right_layout:add(spacer)
-    -- right_layout:add(pacicon)
+    right_layout:add(spacer)
+    right_layout:add(loadwidget)
     -- right_layout:add(pacwidget)
     right_layout:add(spacer)
     right_layout:add(volicon)
@@ -483,19 +465,12 @@ awful.rules.rules = {
       properties = { tag = tags[1][3] } },
     { rule = { class = "Vlc" },
       properties = { tag = tags[1][6] } },
-    { rule = { class = "VirtualBox" },
-      properties = { tag = tags[1][5] } },
-    { rule = { class = "Gns3" },
-      properties = { tag = tags[1][5] } },
-    { rule = { class = "Bitcoin-qt" },
-      properties = { tag = tags[1][9] } },
     { rule = { class = "luakit" },
       properties = { tag = tags[1][2] } },
-    -- Set Firefox to always map on tags number 1 of screen 1.
     { rule = { class = "Firefox" },
       properties = { tag = tags[1][1] } },
     { rule = { class = "Emacs" },
-      properties = { tag = tags[2][1] } },
+       properties = { tag = tags[1][2] } }
 }
 -- }}}
 
