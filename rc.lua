@@ -16,9 +16,9 @@ beautiful.init( awful.util.getdir("config") .. "/themes/default/theme.lua" )
 local naughty = require("naughty")
 local menubar = require("menubar")
 --FreeDesktop
-require('freedesktop.utils')
-require('freedesktop.menu')
-freedesktop.utils.icon_theme = 'gnome'
+-- require('freedesktop.utils')
+-- require('freedesktop.menu')
+-- freedesktop.utils.icon_theme = 'gnome'
 --Vicious + Widgets
 vicious = require("vicious")
 local wi = require("wi")
@@ -159,18 +159,18 @@ vicious.register(loadwidget, vicious.widgets.uptime,
 -- {{{ Menu
 -- Create a laucher widget and a main menu
 
-menu_items = freedesktop.menu.new()
+-- menu_items = freedesktop.menu.new()
 myawesomemenu = {
-   { "manual", terminal .. " -e man awesome", freedesktop.utils.lookup_icon({ icon = 'help' }) },
-   { "edit config", editor_cmd .. " " .. awesome.conffile, freedesktop.utils.lookup_icon({ icon = 'package_settings' }) },
-   { "restart", awesome.restart, freedesktop.utils.lookup_icon({ icon = 'system-shutdown' }) },
-   { "quit", awesome.quit, freedesktop.utils.lookup_icon({ icon = 'system-shutdown' }) }
-       }
+   { "manual", terminal .. " -e man awesome" },
+   { "edit config", editor_cmd .. " " .. awesome.conffile },
+   { "restart", awesome.restart },
+   { "quit", awesome.quit }
+}
 
-        table.insert(menu_items, { "Awesome", myawesomemenu, beautiful.awesome_icon })
-        table.insert(menu_items, { "Wallpaper", wallmenu, freedesktop.utils.lookup_icon({ icon = 'gnome-settings-background' })})
-
-        mymainmenu = awful.menu({ items = menu_items, width = 300 })
+mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+                                    { "open terminal", terminal }
+                                  }
+                        })
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
