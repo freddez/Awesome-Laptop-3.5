@@ -15,10 +15,6 @@ beautiful.init( awful.util.getdir("config") .. "/themes/default/theme.lua" )
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
---FreeDesktop
--- require('freedesktop.utils')
--- require('freedesktop.menu')
--- freedesktop.utils.icon_theme = 'gnome'
 --Vicious + Widgets
 vicious = require("vicious")
 local wi = require("wi")
@@ -159,7 +155,6 @@ vicious.register(loadwidget, vicious.widgets.uptime,
 -- {{{ Menu
 -- Create a laucher widget and a main menu
 
--- menu_items = freedesktop.menu.new()
 myawesomemenu = {
    { "manual", terminal .. " -e man awesome" },
    { "edit config", editor_cmd .. " " .. awesome.conffile },
@@ -190,13 +185,13 @@ mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
 mytaglist.buttons = awful.util.table.join(
-                    awful.button({ }, 1, awful.tag.viewonly),
-                    awful.button({ modkey }, 1, awful.client.movetotag),
-                    awful.button({ }, 3, awful.tag.viewtoggle),
-                    awful.button({ modkey }, 3, awful.client.toggletag),
-                    awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
-                    awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
-                    )
+   awful.button({ }, 1, awful.tag.viewonly),
+   awful.button({ modkey }, 1, awful.client.movetotag),
+   awful.button({ }, 3, awful.tag.viewtoggle),
+   awful.button({ modkey }, 3, awful.client.toggletag),
+   awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
+   awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
+)
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
                      awful.button({ }, 1, function (c)
@@ -283,26 +278,7 @@ for s = 1, screen.count() do
     layout:set_middle(mytasklist[s])
     layout:set_right(right_layout)
 
-   mywibox[s]:set_widget(layout)
-
-   -- Create the bottom wibox
-     -- myinfowibox[s] = awful.wibox({ position = "bottom", screen = s })
-   -- Widgets that are aligned to the bottom
-    -- local bottom_layout = wibox.layout.fixed.horizontal()
-    -- bottom_layout:add(cpuicon)
-    -- bottom_layout:add(cpuwidget)
-    -- bottom_layout:add(spacer)
-    -- --bottom_layout:add(memicon)
-    -- --bottom_layout:add(mem)
-    -- bottom_layout:add(spacer)
-    -- bottom_layout:add(wifiicon)
-    -- bottom_layout:add(wifi)
-    -- bottom_layout:add(spacer)
-    -- bottom_layout:add(spacer)
-
-
-    --myinfowibox[s]:set_widget(bottom_layout)
-
+    mywibox[s]:set_widget(layout)
 end
 -- }}}
 
@@ -374,7 +350,11 @@ globalkeys = awful.util.table.join(
                   awful.util.getdir("cache") .. "/history_eval")
               end),
     -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end)
+    awful.key({ modkey }, "p", function() menubar.show() end),
+
+    awful.key({ modkey }, "s", function () awful.util.spawn("sudo pm-suspend") end),
+    awful.key({ modkey }, "e", function () awful.util.spawn("/usr/local/bin/emacs") end),
+    awful.key({ modkey }, "f", function () awful.util.spawn("firefox") end)
 )
 
 clientkeys = awful.util.table.join(
@@ -407,33 +387,35 @@ end
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, keynumber do
-    globalkeys = awful.util.table.join(globalkeys,
-        awful.key({ modkey }, "#" .. i + 9,
-                  function ()
-                        local screen = mouse.screen
-                        if tags[screen][i] then
-                            awful.tag.viewonly(tags[screen][i])
-                        end
-                  end),
-        awful.key({ modkey, "Control" }, "#" .. i + 9,
-                  function ()
-                      local screen = mouse.screen
-                      if tags[screen][i] then
-                          awful.tag.viewtoggle(tags[screen][i])
-                      end
-                  end),
-        awful.key({ modkey, "Shift" }, "#" .. i + 9,
-                  function ()
-                      if client.focus and tags[client.focus.screen][i] then
-                          awful.client.movetotag(tags[client.focus.screen][i])
-                      end
-                  end),
-        awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
-                  function ()
-                      if client.focus and tags[client.focus.screen][i] then
-                          awful.client.toggletag(tags[client.focus.screen][i])
-                      end
-                  end))
+   globalkeys = awful.util.table.join(
+      globalkeys,
+      awful.key({ modkey }, "#" .. i + 9,
+         function ()
+            local screen = mouse.screen
+            if tags[screen][i] then
+               awful.tag.viewonly(tags[screen][i])
+            end
+      end),
+      awful.key({ modkey, "Control" }, "#" .. i + 9,
+         function ()
+            local screen = mouse.screen
+            if tags[screen][i] then
+               awful.tag.viewtoggle(tags[screen][i])
+            end
+      end),
+      awful.key({ modkey, "Shift" },
+         "#" .. i + 9,
+         function ()
+            if client.focus and tags[client.focus.screen][i] then
+               awful.client.movetotag(tags[client.focus.screen][i])
+            end
+      end),
+      awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
+         function ()
+            if client.focus and tags[client.focus.screen][i] then
+               awful.client.toggletag(tags[client.focus.screen][i])
+            end
+   end))
 end
 
 clientbuttons = awful.util.table.join(
