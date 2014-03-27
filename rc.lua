@@ -134,11 +134,17 @@ tags = {
       layouts[10],  -- 9:facepalm
  }
 }
-for s = 1, screen.count() do
-   -- Each screen has its own tag table.
-   tags[s] = awful.tag(tags.names, s, tags.layout)
+
+if screen.count() == 2 then
+   tags[1] = awful.tag(tags.names, 1, tags.layout)
+   tags[2] = awful.tag({'1'}, 2, awful.layout.suit.tile)
+else
+   for s = 1, screen.count() do
+      -- Each screen has its own tag table.
+      tags[s] = awful.tag(tags.names, s, tags.layout)
+   end
 end
--- }}}
+
 
 
 -- Widgets
@@ -349,7 +355,7 @@ globalkeys = awful.util.table.join(
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit),
+    --awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
@@ -378,7 +384,7 @@ globalkeys = awful.util.table.join(
 
     awful.key({ modkey }, "s", function () awful.util.spawn("sudo pm-suspend") end),
     awful.key({ modkey }, "e", function () awful.util.spawn("/usr/local/bin/emacs") end),
-    awful.key({ modkey }, "f", function () awful.util.spawn("firefox") end)
+    awful.key({ modkey, "Shift" }, "f", function () awful.util.spawn("firefox") end)
 )
 
 clientkeys = awful.util.table.join(
@@ -458,6 +464,7 @@ awful.rules.rules = {
       properties = { border_width = beautiful.border_width,
                      border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
+                     size_hints_honor = false, -- Remove gaps between windows
                      keys = clientkeys,
                      buttons = clientbuttons } },
     { rule = { class = "MPlayer" },
