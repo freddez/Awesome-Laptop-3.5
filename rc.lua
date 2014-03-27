@@ -10,7 +10,18 @@ require("awful.autofocus")
 local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
+
+
+host = awful.util.pread("hostname | tr -d '\n'")
+
 beautiful.init( awful.util.getdir("config") .. "/themes/default/theme.lua" )
+if host == "yoga" then
+   theme.font          = "terminus 16"
+   theme.menu_height = "30"
+else
+   theme.font          = "terminus 8"
+   theme.menu_height = "15"
+end
 
 -- Notification library
 local naughty = require("naughty")
@@ -86,7 +97,12 @@ naughty.config.defaults.gap = 1
 naughty.config.defaults.ontop = true
 naughty.config.defaults.font = "terminus 5"
 naughty.config.defaults.icon = nil
-naughty.config.defaults.icon_size = 256
+if host == "yoga" then
+   naughty.config.defaults.icon_size = 256
+else
+   naughty.config.defaults.icon_size = 64
+end
+
 naughty.config.defaults.fg = beautiful.fg_tooltip
 naughty.config.defaults.bg = beautiful.bg_tooltip
 naughty.config.defaults.border_color = beautiful.border_tooltip
@@ -97,17 +113,18 @@ naughty.config.defaults.hover_timeout = nil
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
+-- ♨☠☭⚡☃⌥⌘✇✣
 tags = {
  names  = {
-         '♨:Web',
-         '☠:Emacs',
-         '☭:Term',
-         '⚡:Luakit',
-         '☃:Vbox',
-         '⌥:Multimedia',
-         '⌘:Conky',
-         '✇:IDE',
-         '✣:Facepalm',
+         '1: Web',
+         '2: Emacs',
+         '3: Indicateur',
+         '4: Samusocial',
+         ' : 5',
+         ' : 6',
+         ' : 7',
+         ' : 8',
+         ' : 9',
  },
  layout = {
       layouts[5],   -- 1:irc
@@ -135,8 +152,11 @@ spacer:set_text(' | ')
 
 
 --Battery Widget
-batt = wibox.widget.textbox()
-vicious.register(batt, vicious.widgets.bat, "Batt: $2% Rem: $3", 61, "BAT1")
+
+if host == "yoga" then
+   batt = wibox.widget.textbox()
+   vicious.register(batt, vicious.widgets.bat, "Batt: $2% Rem: $3", 61, "BAT1")
+end
 
 loadwidget = wibox.widget.textbox()
 vicious.register(loadwidget, vicious.widgets.uptime,
@@ -265,15 +285,19 @@ for s = 1, screen.count() do
     --right_layout:add(mailicon)
     --right_layout:add(mailwidget)
     --right_layout:add(spacer)
-    right_layout:add(baticon)
-    right_layout:add(batpct)
-    right_layout:add(spacer)
+    if host == "yoga" then
+       right_layout:add(baticon)
+       right_layout:add(batpct)
+       right_layout:add(spacer)
+    end
     right_layout:add(loadwidget)
     right_layout:add(spacer)
-    right_layout:add(volicon)
-    right_layout:add(volpct)
-    right_layout:add(volspace)
-    right_layout:add(spacer)
+    if host == "yoga" then
+       right_layout:add(volicon)
+       right_layout:add(volpct)
+       right_layout:add(volspace)
+       right_layout:add(spacer)
+    end
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
 
