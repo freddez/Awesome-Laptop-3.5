@@ -14,14 +14,14 @@ local beautiful = require("beautiful")
 
 host = awful.util.pread("hostname | tr -d '\n'")
 
-beautiful.init( awful.util.getdir("config") .. "/themes/default/theme.lua" )
 if host == "yoga" then
-   theme.font          = "terminus 16"
-   theme.menu_height = "30"
+   THEME_FONT          = "terminus 16"
+   THEME_MENU_HEIGHT = "30"
 else
-   theme.font          = "terminus 8"
-   theme.menu_height = "15"
+   theme_font          = "terminus 8"
+   THEME_MENU_HEIGHT = "15"
 end
+beautiful.init( awful.util.getdir("config") .. "/themes/default/theme.lua" )
 
 -- Notification library
 local naughty = require("naughty")

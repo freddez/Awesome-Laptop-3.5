@@ -9,7 +9,7 @@ home_path  = os.getenv('HOME') .. '/'
 
 theme = {}
 theme.wallpaper = awful.util.getdir("config") .. "/themes/default/bg.png"
-theme.font          = "terminus 8"
+theme.font          = THEME_FONT
 
 theme.bg_normal     = "#222222"
 theme.bg_focus      = "#535d6c"
@@ -59,7 +59,7 @@ theme.tasklist_floating_icon = home_path .. '.config/awesome/themes/default/task
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
 theme.menu_submenu_icon = home_path .. '.config/awesome/themes/default/submenu.png'
-theme.menu_height = "15"
+theme.menu_height = THEME_MENU_HEIGHT
 theme.menu_width  = "100"
 
 -- You can add as many variables as
