@@ -277,9 +277,7 @@ for s = 1, screen.count() do
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(spacer)
-    --right_layout:add(mailicon)
-    --right_layout:add(mailwidget)
-    --right_layout:add(spacer)
+
     if host == "yoga" then
        right_layout:add(baticon)
        right_layout:add(batpct)
