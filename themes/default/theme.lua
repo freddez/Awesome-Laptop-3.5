@@ -26,7 +26,7 @@ theme.fg_minimize   = "#ffffff"
 theme.fg_tooltip    = "#1a1a1a"
 theme.fg_em         = "#d6d6d6"
 
-theme.border_width  = "1"
+theme.border_width  = "0"
 theme.border_normal = "#000000"
 theme.border_focus  = "#535d6c"
 theme.border_marked = "#91231c"
@@ -48,7 +48,7 @@ theme.border_widget = "#3F3F3F"
 -- mouse_finder_[color|timeout|animate_timeout|radius|factor]
 -- Example:
 --theme.taglist_bg_focus = "#ff0000"
-
+theme.tooltip_font = THEME_FONT
 -- Display the taglist squares
 theme.taglist_squares_sel   = home_path .. '.config/awesome/themes/default/taglist/squarefw.png'
 theme.taglist_squares_unsel = home_path .. '.config/awesome/themes/default/taglist/squarew.png'
