@@ -30,6 +30,13 @@ local menubar = require("menubar")
 vicious = require("vicious")
 local wi = require("wi")
 
+
+local blingbling = require("blingbling")
+--
+
+
+
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -165,33 +172,39 @@ vicious.register(loadwidget, vicious.widgets.uptime,
                  function (widget, args)
                     return string.format("Load: %.1f", args[4])
                  end, 61)
+
+
 cpuwidget = wibox.widget.textbox()
 vicious.register(cpuwidget, vicious.widgets.cpu, "$1%")
 
+-- cpuwidget = awful.widget.graph()
+-- cpuwidget:set_width(50)
+-- cpuwidget:set_background_color("#494B4F")
+-- cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 10,0 }, stops = { {0, "#FF5656"}, {0.5, "#88A175"},
+--                     {1, "#AECF96" }}})
+-- vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
+
+
+-- cpuwidget = blingbling.line_graph({ height = 18,
+--                                     width = 160,
+--                                     show_text = true,
+--                                     label = "Cpu: $percent %",
+-- })
+-- vicious.register(cpuwidget, vicious.widgets.cpu,'$1',2)
+
+
+-- cpuwidget=blingbling.progress_graph.new()
+-- cpuwidget:set_height(18)
+-- cpuwidget:set_width(6)
+-- cpuwidget:set_filled(true)
+-- cpuwidget:set_h_margin(1)
+-- cpuwidget:set_filled_color("#00000033")
+-- vicious.register(cpuwidget, vicious.widgets.cpu, "$2")
+
+
+
 netwidget = wibox.widget.textbox()
 --vicious.register(netwidget, vicious.widgets.net, '<span color="#CC9393">${wlan0 down_kb}</span> <span color="#7F9F7F">${wlan0 up_kb}</span>', 3)
-
-vicious.register(netwidget, vicious.widgets.net,
-                 function (widget, args)
-                    local ethdown = args["{eth0 down_kb}"]
-                    local ethup = args["{eth0 up_kb}"]
-                    local ethactive = (tonumber(args["{eth0 carrier}"]) == 1)
-                    local wifidown = args["{wlan0 down_kb}"]
-                    local wifiup = args["{wlan0 up_kb}"]
-                    local wifiactive = (tonumber(args["{wlan0 carrier}"]) == 1)
-
-                    local down = ethdown
-                    local up = ethup
-                    local ifname = "wired"
-                    if (not ethactive and wifiactive) then
-                       down = wifidown
-                       up = wifiup
-                       ifname = "wifi"
-                    end
-                    return string.format('<span color="#CC9393">%.f Kb/s</span> %s ' ..
-                                            '<span color="#7F9F7F">%.f Kb/s</span>',
-                                         wifidown, ifname, wifiup)
-                 end, 3)
 
 
 
@@ -310,7 +323,7 @@ for s = 1, screen.count() do
     right_layout:add(spacer)
     right_layout:add(cpuwidget)
     right_layout:add(spacer)
-    right_layout:add(netwidget)
+    --right_layout:add(netwidget)
 
     right_layout:add(spacer)
     if host == "yoga" then
@@ -361,8 +374,9 @@ globalkeys = awful.util.table.join(
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
     awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end),
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
+    -- awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
+    -- awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
+    awful.key({ modkey, }, "o", function () awful.screen.focus_relative(-1) end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey,           }, "Tab",
         function ()
@@ -412,7 +426,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
+    awful.key({ modkey,"Control" }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
     awful.key({ modkey,           }, "n",
         function (c)
@@ -502,7 +516,11 @@ awful.rules.rules = {
     { rule = { class = "Firefox" },
       properties = { tag = tags[1][1] } },
     { rule = { class = "Emacs" },
-       properties = { tag = tags[1][2] } }
+       properties = { tag = tags[1][2] } },
+    { rule = { class = "Google-chrome" },
+       properties = { tag = tags[2][1] } },
+    { rule = { class = "Google-chrome-beta" },
+       properties = { tag = tags[2][1] } }
 }
 -- }}}
 
