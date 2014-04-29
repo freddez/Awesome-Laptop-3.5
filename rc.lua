@@ -15,10 +15,10 @@ local beautiful = require("beautiful")
 host = awful.util.pread("hostname | tr -d '\n'")
 
 if host == "yoga" then
-   THEME_FONT          = "terminus 16"
+   THEME_FONT = "terminus 16"
    THEME_MENU_HEIGHT = "30"
 else
-   theme_font          = "terminus 8"
+   theme_font = "terminus 8"
    THEME_MENU_HEIGHT = "15"
 end
 beautiful.init( awful.util.getdir("config") .. "/themes/default/theme.lua" )
@@ -29,12 +29,6 @@ local menubar = require("menubar")
 --Vicious + Widgets
 vicious = require("vicious")
 local wi = require("wi")
-
-
-local blingbling = require("blingbling")
---
-
-
 
 
 -- {{{ Error handling
@@ -67,11 +61,6 @@ terminal = "gnome-terminal"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
--- Default modkey.
--- Usually, Mod4 is the key with a logo between Control and Alt.
--- If you do not like this or do not have such a key,
--- I suggest you to remap Mod4 to another key using xmodmap or other tools.
--- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
@@ -156,8 +145,7 @@ end
 
 
 -- Widgets
-
-spacer       = wibox.widget.textbox()
+spacer = wibox.widget.textbox()
 spacer:set_text(' | ')
 
 
@@ -178,36 +166,31 @@ vicious.register(loadwidget, vicious.widgets.uptime,
 cpuwidget = wibox.widget.textbox()
 vicious.register(cpuwidget, vicious.widgets.cpu, "$1%")
 
--- cpuwidget = awful.widget.graph()
--- cpuwidget:set_width(50)
--- cpuwidget:set_background_color("#494B4F")
--- cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 10,0 }, stops = { {0, "#FF5656"}, {0.5, "#88A175"},
---                     {1, "#AECF96" }}})
--- vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
-
-
--- cpuwidget = blingbling.line_graph({ height = 18,
---                                     width = 160,
---                                     show_text = true,
---                                     label = "Cpu: $percent %",
--- })
--- vicious.register(cpuwidget, vicious.widgets.cpu,'$1',2)
-
-
--- cpuwidget=blingbling.progress_graph.new()
--- cpuwidget:set_height(18)
--- cpuwidget:set_width(6)
--- cpuwidget:set_filled(true)
--- cpuwidget:set_h_margin(1)
--- cpuwidget:set_filled_color("#00000033")
--- vicious.register(cpuwidget, vicious.widgets.cpu, "$2")
-
-
-
 netwidget = wibox.widget.textbox()
---vicious.register(netwidget, vicious.widgets.net, '<span color="#CC9393">${wlan0 down_kb}</span> <span color="#7F9F7F">${wlan0 up_kb}</span>', 3)
 
+if host == "yoga" then
+   vicious.register(netwidget, vicious.widgets.net,
+                    function (widget, args)
+                       local ethdown = args["{eth0 down_kb}"]
+                       local ethup = args["{eth0 up_kb}"]
+                       local ethactive = (tonumber(args["{eth0 carrier}"]) == 1)
+                       local wifidown = args["{wlan0 down_kb}"]
+                       local wifiup = args["{wlan0 up_kb}"]
+                       local wifiactive = (tonumber(args["{wlan0 carrier}"]) == 1)
 
+                       local down = ethdown
+                       local up = ethup
+                       local ifname = "wired"
+                       if (not ethactive and wifiactive) then
+                          down = wifidown
+                          up = wifiup
+                          ifname = "wifi"
+                       end
+                       return string.format('<span color="#CC9393">%.f Kb/s</span> %s ' ..
+                                               '<span color="#7F9F7F">%.f Kb/s</span>',
+                                            wifidown, ifname, wifiup)
+                    end, 3)
+end
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
@@ -312,8 +295,10 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
-    if s == 1 then right_layout:add(wibox.widget.systray()) end
-    right_layout:add(spacer)
+    if s == 1 then
+       right_layout:add(wibox.widget.systray())
+        right_layout:add(spacer)
+    end
 
     if host == "yoga" then
        right_layout:add(baticon)
@@ -324,10 +309,9 @@ for s = 1, screen.count() do
     right_layout:add(spacer)
     right_layout:add(cpuwidget)
     right_layout:add(spacer)
-    --right_layout:add(netwidget)
-
-    right_layout:add(spacer)
     if host == "yoga" then
+       right_layout:add(netwidget)
+       right_layout:add(spacer)
        right_layout:add(volicon)
        right_layout:add(volpct)
        right_layout:add(volspace)
