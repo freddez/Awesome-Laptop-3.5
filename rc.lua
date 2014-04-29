@@ -2,7 +2,7 @@
 home_path  = os.getenv('HOME') .. '/'
 
 -- Standard awesome library
---local gears = require("gears")
+local gears = require("gears")
 local awful = require("awful")
 awful.rules = require("awful.rules")
 require("awful.autofocus")
@@ -98,11 +98,12 @@ naughty.config.defaults.position = "top_right"
 naughty.config.defaults.margin = 8
 naughty.config.defaults.gap = 1
 naughty.config.defaults.ontop = true
-naughty.config.defaults.font = "terminus 5"
 naughty.config.defaults.icon = nil
 if host == "yoga" then
+   naughty.config.defaults.font = "terminus 15"
    naughty.config.defaults.icon_size = 256
 else
+   naughty.config.defaults.font = "terminus 5"
    naughty.config.defaults.icon_size = 64
 end
 
@@ -509,8 +510,8 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "Chromium" },
       properties = { tag = tags[1][3] } },
-    { rule = { class = "Vlc" },
-      properties = { tag = tags[1][6] } },
+    -- { rule = { class = "Vlc" },
+    --   properties = { tag = tags[1][6] } },
     { rule = { class = "luakit" },
       properties = { tag = tags[1][2] } },
     { rule = { class = "Firefox" },
